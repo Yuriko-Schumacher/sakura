@@ -11,27 +11,101 @@ library(tidyverse)
 sakura.raw <- read_csv("data/sakura_full_bloom.csv")
 sakura <- sakura.raw %>% 
   select(-`30 Year Average 1981-2010`, -Notes) %>% 
-  gather(key = "year", value = "date", "1953":"2020") %>% 
+  gather(key = "year", value = "year.date", "1953":"2020") %>% 
   rename(location = `Site Name`,
-         now.observed = `Currently Being Observed`)
+         now.observed = `Currently Being Observed`) %>% 
+  mutate(date = as.Date(str_sub(year.date, start = 6), tryFormats = c("%m-%d", "%m/%d")))
+
+kyoto <- sakura %>% 
+  filter(location == "Kyoto") 
+
+kyoto %>% 
+  ggplot(aes(x = date)) +
+  geom_histogram(binwidth = 1, color = "white", fill = "#ff9ec9") +
+  theme_minimal()
+
+mean.Date(kyoto$date) # 04-06
+
+sakura.1980 <- sakura %>% 
+  filter(now.observed == TRUE) %>% 
+  filter(year == "1980") %>% 
+  filter(location != "Ishigaki Island",
+         location != "Minamidaitojima",
+         location != "Miyakojima")
+
+sakura.1980 %>% 
+  ggplot(aes(x = date)) +
+  geom_histogram(binwidth = 3, color = "white", fill = "#ff9ec9") +
+  theme_minimal()
+
+sakura.2020 <- sakura %>% 
+  filter(now.observed == TRUE) %>% 
+  filter(year == "2020") %>% 
+    filter(location != "Ishigaki Island",
+         location != "Minamidaitojima",
+         location != "Miyakojima")
+
+sakura.paired <-  
+  rbind(sakura.1980, sakura.2020)
+
+
+sakura.paired %>% 
+    ggplot(aes(x = date)) +
+  geom_histogram(color = "white", fill = "#ff9ec9") +
+  facet_wrap(~ year, ncol = 1) +
+  labs(title ="Distribution of Japan's cherry blossom full bloom date in 1980 and 2020") +
+  theme_minimal()
+
+
+t.test(date ~ year, data = sakura.paired, paired = TRUE)
+
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+install.packages("readxl")
+library("readxl")
+cb.raw <- read_excel("data/KyotoFullFlower7.xls")
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+cb.cleaned <- cb.raw[-c(1:25), ] %>% 
+  select(year = `Full-flowering dates of Japanese cherry (Prunus jamasakura) at Kyoto, Japan. (Latest version, Jun. 12, 2012)`,
+         date_doy = ...2,
+         date = ...3,
+         source_type = ...5,
+         source = ...6) %>% 
+  mutate(year = as.numeric(year), 
+         date_doy = as.numeric(date_doy),
+         month = as.numeric(str_sub(date, end = 1)),
+         day = as.numeric(str_sub(date, start = 2)))
+
+write_csv(cb.cleaned, "data/kyoto1200.csv")
+
+ggplot(data = cb.cleaned,
+       mapping = aes(x = date_doy, y = -year)) +
+  geom_point()
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+```{r}
+mean.temp.raw <- read_excel("data/TempReconst7Final.xls", na = "-50")
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+mean.temp <- mean.temp.raw[-c(1:16), ] %>% 
+  select(year = TempReconst7Final.xls,
+         estimated = ...2,
+         observed = ...5,
+         urban.bias1 = ...6,
+         urban.bias2 = ...7) %>% 
+  mutate(
+    year = as.numeric(year),
+    estimated = as.numeric(estimated),
+    observed = as.numeric(observed),
+    urban.bias1 = as.numeric(urban.bias1),
+    urban.bias2 = as.numeric(urban.bias2)
+  ) %>% 
+  mutate(urban.bias = (urban.bias1 + urban.bias2) / 2) %>% 
+  select(-c(urban.bias1, urban.bias2))
+
+write_csv(mean.temp, "data/mean_temp.csv")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

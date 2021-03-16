@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;900&family=Overpass:ital,wght@0,300;0,700;1,400&display=swap");
+
+* {
+	box-sizing: border-box;
+	font-family: "Overpass", sans-serif;
+}
+
+html,
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "Noto Serif JP", serif;
+	font-size: 18px;
+	color: #303030;
+}
+
+#kyoto1200__chart {
+	width: 90%;
+	height: 90vh;
+	margin: 0 auto;
+}
