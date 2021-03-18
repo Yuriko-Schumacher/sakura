@@ -3,6 +3,7 @@
 * {
 	box-sizing: border-box;
 	font-family: "Overpass", sans-serif;
+	background: navy;
 }
 
 html,
@@ -11,11 +12,21 @@ body {
 	padding: 0px;
 	font-family: "Noto Serif JP", serif;
 	font-size: 18px;
-	color: #303030;
+	color: #ccc;
 }
 
 #kyoto1200__chart {
-	width: 90%;
-	height: 90vh;
+	width: 50%;
+	height: 5000px;
 	margin: 0 auto;
+}
+
+.axis-label {
+	fill: #ccc;
+	font-size: 16px;
+}
+
+.patal {
+	transform-box: fill-box;
+	transform-origin: center;
 }
