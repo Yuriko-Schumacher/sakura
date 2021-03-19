@@ -82,6 +82,10 @@ cb.cleaned <- cb.raw[-c(1:25), ] %>%
          month = as.numeric(str_sub(date, end = 1)),
          day = as.numeric(str_sub(date, start = 2)))
 
+cb.al <- cb.cleaned %>% 
+  mutate(source_type = ifelse(source_type %in% c("1", "2", "3"), "1", source_type))
+
+
 write_csv(cb.cleaned, "data/kyoto1200.csv")
 
 ggplot(data = cb.cleaned,
@@ -113,7 +117,11 @@ mean.temp.final <- mean.temp.added %>%
 sakura <- cbind(cb.cleaned, mean.temp.final) %>% 
   select(-8)
 
+sakura.al <- cbind(cb.al, mean.temp.final) %>% 
+  select(-8)
+
 write_csv(sakura, "data/sakura.csv")
+write_csv(sakura.al, "data/sakura.al.csv")
 ```
 
 ```{r}
