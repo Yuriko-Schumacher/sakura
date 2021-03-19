@@ -17,8 +17,17 @@ body {
 
 #kyoto1200__chart {
 	width: 50%;
-	height: 5000px;
+	height: 3000px;
 	margin: 0 auto;
+}
+
+.axis,
+.axis > * {
+	stroke: #ccc;
+}
+
+.tick > text {
+	fill: #ccc;
 }
 
 .axis-label {

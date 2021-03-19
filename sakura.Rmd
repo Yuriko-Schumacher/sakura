@@ -65,7 +65,10 @@ t.test(date ~ year, data = sakura.paired, paired = TRUE)
 ```{r}
 install.packages("readxl")
 library("readxl")
-cb.raw <- read_excel("data/KyotoFullFlower7.xls")
+install.packages("weathermetrics")
+library(weathermetrics)
+
+cb.raw <- read_excel("data/raw data/KyotoFullFlower7.xls")
 
 
 cb.cleaned <- cb.raw[-c(1:25), ] %>% 
@@ -88,24 +91,32 @@ ggplot(data = cb.cleaned,
 
 
 ```{r}
-mean.temp.raw <- read_excel("data/TempReconst7Final.xls", na = "-50")
+mean.temp.raw <- read_excel("data/raw data/759Temp7.xls", na = "-999.9")
 
-mean.temp <- mean.temp.raw[-c(1:16), ] %>% 
-  select(year = TempReconst7Final.xls,
-         estimated = ...2,
-         observed = ...5,
-         urban.bias1 = ...6,
-         urban.bias2 = ...7) %>% 
+mean.temp <- mean.temp.raw[-c(1:14), ] %>%
+  select(year = `759Temp7.xls`,
+         tempC = ...2) 
+
+year <- c(2011, 2012, 2013, 2014, 2015)
+tempC <- c(6.8, 8.3, 9.7, 9.0, 9.4)
+rows_to_add <- data.frame(year, tempC)
+
+mean.temp.added <- rbind(mean.temp[-1211, ], rows_to_add)
+
+mean.temp.final <- mean.temp.added %>% 
   mutate(
     year = as.numeric(year),
-    estimated = as.numeric(estimated),
-    observed = as.numeric(observed),
-    urban.bias1 = as.numeric(urban.bias1),
-    urban.bias2 = as.numeric(urban.bias2)
-  ) %>% 
-  mutate(urban.bias = (urban.bias1 + urban.bias2) / 2) %>% 
-  select(-c(urban.bias1, urban.bias2))
+    tempC = as.numeric(tempC),
+    tempF = celsius.to.fahrenheit(tempC, round = 2))
 
-write_csv(mean.temp, "data/mean_temp.csv")
+
+sakura <- cbind(cb.cleaned, mean.temp.final) %>% 
+  select(-8)
+
+write_csv(sakura, "data/sakura.csv")
+```
+
+```{r}
+
 ```
 
