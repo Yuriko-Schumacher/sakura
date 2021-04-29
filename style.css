@@ -3,7 +3,7 @@
 * {
 	box-sizing: border-box;
 	font-family: "Overpass", sans-serif;
-	background: navy;
+	/* background: navy; */
 }
 
 html,
@@ -12,30 +12,49 @@ body {
 	padding: 0px;
 	font-family: "Noto Serif JP", serif;
 	font-size: 18px;
-	color: #ccc;
+	/* background: navy;
+	color: #ccc; */
 }
 
-#kyoto1200__chart {
-	width: 50%;
-	height: 3000px;
+#kyoto1200 {
+	position: relative;
+	width: 90%;
+	max-width: 1000px;
 	margin: 0 auto;
+}
+
+#kyoto1200__histogram {
+	height: 250px;
+	/* background: pink; */
+	position: sticky;
+	top: 0;
+}
+
+#kyoto1200__scatterplot {
+	height: 3000px;
+	background: rgba(0, 0, 128, 0.324);
 }
 
 .axis,
 .axis > * {
-	stroke: #ccc;
+	/* stroke: #ccc; */
 }
 
 .tick > text {
-	fill: #ccc;
+	/* fill: #ccc; */
 }
 
 .axis-label {
-	fill: #ccc;
+	/* fill: #ccc; */
 	font-size: 16px;
 }
 
 .patal {
 	transform-box: fill-box;
 	transform-origin: center;
+}
+
+/* ------------- RADAR ------------- */
+#rader-chart > svg {
+	margin: 0 auto;
 }

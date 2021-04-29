@@ -1,13 +1,21 @@
-const margin = { t: 50, r: 50, b: 50, l: 50 };
-const w = document.querySelector("#kyoto1200__chart").clientWidth;
+const margin = { t: 25, r: 25, b: 25, l: 50 };
+const w = document.querySelector("#kyoto1200__scatterplot").clientWidth;
 const h = 3000;
 
-const svg = d3
-	.select("#kyoto1200__chart")
+const svgH = d3
+	.select("#kyoto1200__histogram")
+	.append("svg")
+	.attr("width", w)
+	.attr("height", 250);
+
+const svgS = d3
+	.select("#kyoto1200__scatterplot")
 	.append("svg")
 	.attr("width", w)
 	.attr("height", h);
-const containerG = svg.append("g").classed("container", true);
+
+const containerHG = svgH.append("g").classed("container-histogram", true);
+const containerSG = svgS.append("g").classed("container-scatterplot", true);
 // .attr("transform", `translate(${margin.l}, ${margin.t})`);
 
 Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/patal.svg")]).then(
@@ -16,7 +24,7 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/patal.svg")]).then(
 		let data = datasets[0];
 		let svgEl = datasets[1];
 
-		let defs = containerG.append("defs").html(svgEl);
+		let defs = containerSG.append("defs").html(svgEl);
 
 		console.log(datasets);
 		let filteredData = data.filter((d) => {
@@ -25,13 +33,23 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/patal.svg")]).then(
 		filteredData.forEach(parseData);
 		console.log(filteredData);
 
+		let groupedByDate = d3.group(filteredData, (d) => d.date_doy);
+		groupedByDate = Array.from(groupedByDate);
+		groupedByDate = groupedByDate.sort((a, b) => a[0] - b[0]);
+		console.log(groupedByDate);
+
 		// create scales
 		let xScale = d3
 			.scaleLinear()
 			.domain([85, 125])
 			.range([margin.l, w - margin.r]);
 
-		let yScale = d3
+		let yScaleH = d3
+			.scaleLinear()
+			.domain([0, d3.max(groupedByDate, (d) => d[1].length) + 1])
+			.range([250 - margin.b, margin.t]);
+
+		let yScaleS = d3
 			.scaleLinear()
 			.domain([800, 2030])
 			.range([margin.t, h - margin.b]);
@@ -62,40 +80,86 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/patal.svg")]).then(
 		// 	"#f25278", // 0. modern data, near red
 		// ];
 
-		let groupedData = d3.group(filteredData, (d) => d.source_type);
-		groupedData = Array.from(groupedData);
+		let groupedByType = d3.group(filteredData, (d) => d.source_type);
+		groupedByType = Array.from(groupedByType);
 
 		let colorScale = d3
 			.scaleOrdinal()
-			.domain(groupedData.map((d) => d[0]))
+			.domain(groupedByType.map((d) => d[0]))
 			.range(colors);
 
 		let angleScale = d3
 			.scaleLinear()
 			.domain(d3.extent(filteredData, (d) => d.tempF))
-			.range([0, -288]);
+			.range([144, -144]);
 
 		let xAxisBottom = d3.axisBottom(xScale);
 		let xAxisTop = d3.axisTop(xScale);
-		containerG
-			.append("g")
-			.classed("axis", true)
-			.attr("transform", `translate(0, ${h - margin.b})`)
-			.call(xAxisBottom);
-		containerG
-			.append("g")
-			.classed("axis", true)
-			.attr("transform", `translate(0, ${margin.t})`)
-			.call(xAxisTop);
 
-		let yAxis = d3.axisLeft(yScale);
-		containerG
+		// ---------- HISTOGRAM -----------
+		containerHG
+			.append("g")
+			.classed("axis", true)
+			.attr("transform", `translate(0, ${250 - margin.b})`)
+			.call(xAxisBottom);
+
+		let yAxisH = d3.axisLeft(yScaleH);
+		containerHG
 			.append("g")
 			.classed("axis", true)
 			.attr("transform", `translate(${margin.l}, 0)`)
-			.call(yAxis);
+			.call(yAxisH);
 
-		let patalG = containerG
+		let histogramG = containerHG
+			.selectAll("g.histogram")
+			.data(filteredData)
+			.enter()
+			.append("g")
+			.classed("histogram", true);
+
+		let idx = -1;
+		filteredData.forEach((data) => {
+			groupedByDate.forEach((el) => {
+				idx = el[1].findIndex((d) => d === data);
+				if (idx == -1) {
+					return;
+				} else {
+					data.count = idx;
+				}
+			});
+		});
+
+		console.log(filteredData);
+
+		histogramG
+			.append("circle")
+			.attr("cx", (d) => xScale(d.date_doy))
+			.attr("cy", (d) => yScaleH(d.count))
+			.attr("r", 5)
+			.attr("fill", "gray")
+			.attr("fill-opacity", 0.3);
+
+		// ---------- SCATTER PLOT -----------
+		// containerSG
+		// 	.append("g")
+		// 	.classed("axis", true)
+		// 	.attr("transform", `translate(0, ${h - margin.b})`)
+		// 	.call(xAxisBottom);
+
+		// containerSG
+		// 	.append("g")
+		// 	.classed("axis", true)
+		// 	.attr("transform", `translate(0, ${margin.t})`)
+		// 	.call(xAxisTop);
+
+		let yAxisS = d3.axisLeft(yScaleS);
+		containerSG
+			.append("g")
+			.classed("axis", true)
+			.attr("transform", `translate(${margin.l}, 0)`)
+			.call(yAxisS);
+
+		let patalG = containerSG
 			.selectAll("g.patal")
 			.data(filteredData)
 			.enter()
@@ -104,7 +168,7 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/patal.svg")]).then(
 			.attr(
 				"transform",
 				(d) =>
-					`translate(${xScale(d.date_doy)}, ${yScale(
+					`translate(${xScale(d.date_doy) - 5.7}, ${yScaleS(
 						d.year
 					)}) rotate(${angleScale(d.tempF)})`
 			);

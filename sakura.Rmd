@@ -125,6 +125,96 @@ write_csv(sakura.al, "data/sakura.al.csv")
 ```
 
 ```{r}
+full.bloom.raw <- read_csv("data/sakura_full_bloom_dates.csv")
+first.bloom.raw <- read_csv("data/sakura_first_bloom_dates.csv")
 
+# from 1953 to 2020
+full.bloom.gathered <- full.bloom.raw %>% 
+  select(-`30 Year Average 1981-2010`, -Notes) %>% 
+  gather(key = "year", value = "date", "1953":"2020") %>% 
+  rename(location = `Site Name`,
+         now.observed = `Currently Being Observed`) %>% 
+  filter(location == "Kyoto") %>% 
+  select(-now.observed, -location)
+
+first.bloom.gathered <- first.bloom.raw %>% 
+  select(-`30 Year Average 1981-2010`, -Notes) %>% 
+  gather(key = "year", value = "date", "1953":"2020") %>% 
+  rename(location = `Site Name`,
+         now.observed = `Currently Being Observed`) %>% 
+  filter(location == "Kyoto") %>% 
+  select(-now.observed, -location)
+
+# add 2021 data
+kyoto_first.2021 <- c("2021", "2021-03-16")
+kyoto_full.2021 <- c("2021", "2021-03-26")
+
+full.bloom.1953 <- rbind(full.bloom.gathered, kyoto_full.2021) %>% 
+  mutate(
+    date = as.Date(date, format = "%Y-%m-%d"),
+    date.jan1 = as.Date(paste(year, "-01-01", sep = ""), format = "%Y-%m-%d"),
+    full_doy = as.numeric(date - date.jan1)) %>% 
+  select(year, full_doy)
+
+first.bloom.1953 <- rbind(first.bloom.gathered, kyoto_first.2021) %>% 
+  mutate(
+    date = as.Date(date, format = "%Y-%m-%d"),
+    date.jan1 = as.Date(paste(year, "-01-01", sep = ""), format = "%Y-%m-%d"),
+    first_doy = as.numeric(date - date.jan1)) %>% 
+  select(year, first_doy)
+
+bloom.1953 <- cbind(first.bloom.1953, full.bloom.1953) %>% 
+  select(-3)
+
+# from 1881 to 1952
+cb.1881.1952 <- cb.cleaned %>% 
+  rename(full_doy = date_doy) %>% 
+  select(year, full_doy) %>% 
+  filter(year >= 1881 & year <= 1952) %>% 
+  mutate(first_doy = "NA")
+
+# bind data
+cb.full <- rbind(cb.1881.1952, bloom.1953)
+
+write_csv(cb.full, "data/kyoto_1881-2021.csv")
+
+# kyoto temperature data
+kyoto.temp <- read_csv("data/kyoto-temperature.csv") %>% 
+  mutate(year = ceiling(row_number() / 15) + 1880,
+         interval = row_number() %% 15) %>% 
+  mutate(interval = ifelse(interval == 0, 15, interval)) %>% 
+  select(-date_from)
+
+seasons <- c("early_Nov", "mid_Nov", "late_Nov", "early_Dec", "mid_Dec",
+         "late_Dec", "early_Jan", "mid_Jan", "late_Jan", "early_Feb",
+         "mid_Feb", "late_Feb", "early_Mar", "mid_Mar", "late_Mar")
+
+seasonal <- kyoto.temp %>% 
+  mutate(season = seasons[as.numeric(interval)]) %>% 
+  select(-interval)
+
+write_csv(seasonal, "data/seasonal-temp.csv")
+
+
+# monthly temperature
+monthly <- read_csv("data/kyoto-monthly-temperature.csv") %>% 
+  mutate(year = ceiling(row_number() / 5) + 1880,
+         interval = row_number() %% 5) %>% 
+  mutate(interval = ifelse(interval == 0, 5, interval)) %>% 
+  select(-year_month)
+
+months = c("avg_Nov", "avg_Dec", "avg_Jan", "avg_Feb", "avg_Mar")
+
+monthly.final = monthly %>% 
+  mutate(month = months[as.numeric(interval)]) %>% 
+  select(-interval)
+
+write_csv(monthly.final, "data/monthly-temp.csv")
+
+# bind data
+cb.final <- cbind(cb.full, temp.spread, monthly.spread) %>% 
+  select(-4, -20)
+
+write_csv(cb.final, "data/temp_merged.csv")
 ```
 
