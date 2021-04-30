@@ -69,7 +69,7 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 		let yScaleScatterplot = d3
 			.scaleLinear()
 			.domain([800, 2030])
-			.range([margin.t, h - 0.4 * windowW]);
+			.range([margin.t, h - margin.b]);
 
 		// let groupedByType = d3.group(filteredData, (d) => d.source_type);
 		// groupedByType = Array.from(groupedByType);
@@ -294,6 +294,19 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 			.attr("fill-opacity", 0.8)
 			.attr("stroke-width", 0.5)
 			.attr("stroke", "#ccc");
+
+		d3
+			.select("#kyoto1200__scatterplot")
+			.append("div")
+			.classed("comment", true)
+			.append("article")
+			.append("p")
+			.html(`In 2018, full-blooming was earliest tie at that time
+    (March 28th, 86 days after January 1st). In 2021,
+    cherry blossoms in Kyoto peaked earliest on record,
+    fully-blooming on March 26th (84 days after January
+    1st).<br><br> After 1900, XXX% of full-blooming occurred
+    after the average date until that year.`);
 
 		d3.selectAll(".histogram-petal")
 			.on("mouseover", function (e, d) {

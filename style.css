@@ -12,6 +12,7 @@ body {
 	padding: 0px;
 	font-family: "Noto Serif JP", serif;
 	font-size: 18px;
+	scroll-behavior: smooth;
 	/* background: navy;
 	color: #ccc; */
 }
@@ -70,7 +71,7 @@ body {
 }
 
 #kyoto1200__scatterplot {
-	height: 3000px;
+	height: calc(100vh + 3000px);
 	position: relative;
 }
 
@@ -109,7 +110,8 @@ body {
 }
 
 .histogram-tooltip,
-.scatterplot-tooltip {
+.scatterplot-tooltip,
+.rader-tooltip {
 	position: absolute;
 	z-index: 2;
 	top: 0;
@@ -122,12 +124,60 @@ body {
 	padding: 0.5em 1em;
 }
 
-/* ------------- RADAR ------------- */
-#rader-chart {
-	width: 70%;
-	height: 100vh;
+article {
+	width: 80%;
+	max-width: 600px;
+	margin: 10em auto;
 }
 
-#rader-chart > svg {
-	margin: 0 auto;
+/* ------------- RADAR ------------- */
+#rader-sample {
+	margin: 10em auto;
+	display: flex;
+	position: relative;
+}
+
+#rader-sample__chart {
+	height: 100vh;
+	position: sticky;
+	top: 0;
+}
+
+#rader-sample__explanation {
+	margin: 5em auto;
+}
+
+.arrow {
+	position: absolute;
+	top: 60%;
+	left: 60%;
+	opacity: 0;
+}
+
+.step {
+	position: relative;
+	min-height: 70vh;
+	width: 100%;
+	padding: 0 3em;
+	display: flex;
+	align-items: center;
+	opacity: 0.1;
+}
+
+.step-active {
+	opacity: 1;
+}
+
+#rader-chart__container {
+	display: flex;
+}
+
+#rader-chart {
+	width: 60%;
+	height: 100vh;
+	position: relative;
+}
+
+.rader-zoomed__text {
+	transform: scale(0.3);
 }

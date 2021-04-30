@@ -59,11 +59,16 @@ function placeFlowers(bloomingData) {
 	// 	.attr("stroke-opacity", 0.5);
 }
 
-function drawPetals(monthlyData) {
+function drawPetals(monthlyData, selection) {
 	let year = monthlyData[0];
 	let tempD = monthlyData[1];
+	let sel;
 
-	let sel = d3.select(`.year-${year}`);
+	if (selection) {
+		sel = selection;
+	} else {
+		sel = d3.select(`.year-${year}`);
+	}
 
 	let xScale = d3
 		.scaleBand()
@@ -73,33 +78,33 @@ function drawPetals(monthlyData) {
 	let yScale = d3
 		.scaleRadial()
 		.domain(d3.extent(tempD, (d) => d.avg_tempC)) // min: -0.6, max: 17.1
-		.range([5, 20]);
+		.range([8, 15]);
 
 	let colorScale = d3
 		.scaleSequential()
 		.domain([1880, 2022])
 		.interpolator(d3.interpolateRdPu);
 
-	const radialGradient = svg
-		.selectAll("defs")
-		.data(tempD)
-		.join("defs")
-		.append("linearGradient")
-		.attr("id", "linear-gradient")
-		.attr("x1", 0)
-		.attr("y1", 0)
-		.attr("x2", (d) => xScale(d.month))
-		.attr("y2", "100%")
-		.selectAll("stop")
-		.data([
-			{ offset: "0%", color: "rgba(255, 255, 255)" },
-			{ offset: "50%", color: "rgba(255, 183, 197)" },
-			{ offset: "100%", color: "rgba(250, 89, 120)" },
-		])
-		.enter()
-		.append("stop")
-		.attr("offset", (d) => d.offset)
-		.attr("stop-color", (d) => d.color);
+	// const radialGradient = svg
+	// 	.selectAll("defs")
+	// 	.data(tempD)
+	// 	.join("defs")
+	// 	.append("linearGradient")
+	// 	.attr("id", "linear-gradient")
+	// 	.attr("x1", 0)
+	// 	.attr("y1", 0)
+	// 	.attr("x2", (d) => xScale(d.month))
+	// 	.attr("y2", "100%")
+	// 	.selectAll("stop")
+	// 	.data([
+	// 		{ offset: "0%", color: "rgba(255, 255, 255)" },
+	// 		{ offset: "50%", color: "rgba(255, 183, 197)" },
+	// 		{ offset: "100%", color: "rgba(250, 89, 120)" },
+	// 	])
+	// 	.enter()
+	// 	.append("stop")
+	// 	.attr("offset", (d) => d.offset)
+	// 	.attr("stop-color", (d) => d.color);
 
 	let petalG = sel
 		.append("g")
@@ -109,7 +114,7 @@ function drawPetals(monthlyData) {
 		.join("g")
 		.attr(
 			"transform",
-			(d) => `rotate(${(xScale(d.month) * 180) / Math.PI + 216})`
+			(d) => `rotate(${(xScale(d.month) * 180) / Math.PI + 240})`
 		);
 
 	petalG
@@ -118,16 +123,20 @@ function drawPetals(monthlyData) {
 		.attr("cy", (d) => yScale(d.avg_tempC) / 2)
 		.attr("r", (d) => yScale(d.avg_tempC) / 2)
 		.attr("fill", (d) => colorScale(d.year))
-		.attr("fill-opacity", 0.3)
-		.attr("stroke", "rgb(211 24 66)")
-		.attr("stroke-width", 0.3);
+		.attr("fill-opacity", 0.5)
+		.attr("stroke", "rgb(252, 195, 195)")
+		.attr("stroke-width", 0.5);
 }
 
-function drawRadarChart(seasonalData) {
+function drawRadarChart(seasonalData, selection) {
 	let year = seasonalData[0];
 	let tempD = seasonalData[1];
 
-	let sel = d3.select(`.year-${year}`);
+	if (selection) {
+		sel = selection;
+	} else {
+		sel = d3.select(`.year-${year}`);
+	}
 
 	let xScale = d3
 		.scaleBand()
@@ -137,7 +146,7 @@ function drawRadarChart(seasonalData) {
 	let yScale = d3
 		.scaleRadial()
 		.domain(d3.extent(tempD, (d) => d.avg_tempC)) // min: -0.6, max: 17.1
-		.range([5, 10]);
+		.range([5, 7]);
 
 	let threadG = sel
 		.append("g")
@@ -156,7 +165,7 @@ function drawRadarChart(seasonalData) {
 		.attr("y1", 0)
 		.attr("x2", (d) => xScale(d.season))
 		.attr("y2", (d) => yScale(d.avg_tempC))
-		.attr("stroke", "rgba(211, 24, 66, 0.5)")
+		.attr("stroke", "rgba(211, 24, 66, 0.8)")
 		.attr("stroke-width", 0.8);
 
 	threadG

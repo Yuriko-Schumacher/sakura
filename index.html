@@ -34,11 +34,77 @@
 				</div>
 			</div>
 		</section>
-		<br /><br /><br /><br /><br /><br /><br /><br />
-		<br /><br /><br /><br /><br /><br /><br /><br />
-		<br /><br /><br /><br /><br /><br /><br /><br />
-		<div id="rader-chart"></div>
-		<script src="scripts/script.js"></script>
+		<section id="temp-analysis">
+			<div class="comment">
+				<article>
+					<h1>Cherry blossom's full-bloom date and temperature</h1>
+					<p>
+						<a
+							href="http://www.jma.go.jp/jma/menu/menureport.html"
+							target="_blank"
+							>Japan Meteorological Agency</a
+						>
+						releases monthly temperature data since 1880 in Kyoto,
+						Japan.
+					</p>
+					<p>
+						Many meteorologists say cherry blossoms' first-blooming
+						and full-blooming are closely related to temperature in
+						the previous winter and early spring.
+					</p>
+					<p>
+						I downloaded monthly average temperature data from
+						November to March since 1880, as well as average
+						temperature every 10 days during that time (early
+						November, mid-November, late November, ... to late
+						March).
+					</p>
+				</article>
+			</div>
+			<div id="rader-sample">
+				<div id="rader-sample__chart">
+					<img
+						class="arrow"
+						src="asset/arrow.svg"
+						alt=""
+						width="50"
+					/>
+				</div>
+				<div id="rader-sample__explanation">
+					<div class="step" data-index="0">
+						<p>
+							Each petal represents monthly average temperature.
+						</p>
+					</div>
+					<div class="step" data-index="1">
+						<p>This petal shows average temperature in November.</p>
+					</div>
+					<div class="step" data-index="2">
+						<p>This shows average temperature in March.</p>
+					</div>
+					<div class="step" data-index="3">
+						<p>Each thred represents 10-day average temperature.</p>
+					</div>
+					<div class="step" data-index="4">
+						<p>From early November to...</p>
+					</div>
+					<div class="step" data-index="5">
+						<p>Late March.</p>
+					</div>
+					<div class="step" data-index="6">
+						<p>
+							Scroll down and click flowers to explore first-bloom
+							dates and monthly/10-day-average temperatures.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div id="rader-chart__container">
+				<div id="rader-chart"><div class="rader-tooltip"></div></div>
+				<div id="rader-zoomed-chart"></div>
+			</div>
+		</section>
+		<!-- <script src="scripts/script.js"></script> -->
 		<!-- <script src="scripts/script-test.js"></script> -->
 		<script src="scripts/radarChart.js"></script>
 		<script src="scripts/tempData.js"></script>
