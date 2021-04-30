@@ -16,45 +16,118 @@ body {
 	color: #ccc; */
 }
 
-#kyoto1200 {
-	position: relative;
-	width: 90%;
-	max-width: 1000px;
+#intro {
+	width: 80%;
+	max-width: 800px;
 	margin: 0 auto;
+	min-height: 70vh;
+}
+
+#kyoto1200 {
+	display: flex;
+	position: relative;
+}
+
+#sub {
+	width: 30%;
+	height: 100vh;
+	position: sticky;
+	top: 0;
+	background-color: rgba(211, 211, 211, 0.3);
+}
+
+.label,
+.angle-legend-label {
+	font-size: 10px;
+}
+
+.legendTitle,
+.angle-legend-title {
+	font-size: 0.8em;
+}
+
+#draggable-line {
+	opacity: 0.5;
+	cursor: grab;
+}
+
+#main {
+	width: 70%;
 }
 
 #kyoto1200__histogram {
-	height: 250px;
-	/* background: pink; */
+	height: 30vh;
 	position: sticky;
 	top: 0;
+	background: rgb(255, 255, 255);
+	background: linear-gradient(
+		0deg,
+		rgba(255, 255, 255, 0) 0%,
+		rgba(255, 255, 255, 1) 25%,
+		rgba(255, 255, 255, 1) 100%
+	);
+	z-index: 1;
 }
 
 #kyoto1200__scatterplot {
 	height: 3000px;
-	background: rgba(0, 0, 128, 0.324);
+	position: relative;
 }
 
-.axis,
-.axis > * {
-	/* stroke: #ccc; */
+.y-axis-s > path,
+.y-axis-s > * > line {
+	opacity: 0;
 }
 
-.tick > text {
-	/* fill: #ccc; */
+.y-axis-s > * > text {
+	font-size: 2em;
+	font-weight: bold;
 }
 
-.axis-label {
-	/* fill: #ccc; */
-	font-size: 16px;
-}
-
-.patal {
+.angle-legend,
+.scatterplot-petal,
+.histogram-petal {
 	transform-box: fill-box;
 	transform-origin: center;
 }
 
+.histogram-petal {
+	display: none;
+	opacity: 0;
+}
+
+.histogram-petal-active {
+	display: block;
+	opacity: 1;
+	transition: all 0.4s ease;
+}
+
+.count {
+	font-size: 10px;
+	text-anchor: middle;
+	opacity: 0;
+}
+
+.histogram-tooltip,
+.scatterplot-tooltip {
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 220px;
+	visibility: hidden;
+	background-color: rgba(0, 0, 0, 0.9);
+	color: white;
+	font-size: 0.75em;
+	padding: 0.5em 1em;
+}
+
 /* ------------- RADAR ------------- */
+#rader-chart {
+	width: 70%;
+	height: 100vh;
+}
+
 #rader-chart > svg {
 	margin: 0 auto;
 }

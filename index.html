@@ -6,29 +6,41 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Sakura</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.5.0/d3.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+		<script src="https://d3js.org/d3-drag.v2.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/save-svg-as-png/1.4.17/saveSvgAsPng.min.js"></script>
 		<script src="https://unpkg.com/d3-radial-axis@1.6.4/dist/d3-radial-axis.min.js"></script>
+		<script src="https://unpkg.com/enter-view"></script>
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
 		<!-- <section>
 			<svg id="test"></svg>
 		</section> -->
-		<section id="title">
+		<section id="intro">
 			<h1>
 				Cherry blossom’s full-bloom date in Kyoto, Japan for 1200 years
 			</h1>
 		</section>
 
 		<section id="kyoto1200">
-			<div id="kyoto1200__histogram"></div>
-			<div id="kyoto1200__scatterplot"></div>
+			<div id="sub"></div>
+			<div id="main">
+				<div id="kyoto1200__histogram">
+					<div class="histogram-tooltip"></div>
+				</div>
+				<div id="kyoto1200__scatterplot">
+					<div class="scatterplot-tooltip"></div>
+				</div>
+			</div>
 		</section>
+		<br /><br /><br /><br /><br /><br /><br /><br />
+		<br /><br /><br /><br /><br /><br /><br /><br />
 		<br /><br /><br /><br /><br /><br /><br /><br />
 		<div id="rader-chart"></div>
 		<script src="scripts/script.js"></script>
 		<!-- <script src="scripts/script-test.js"></script> -->
-		<!-- <script src="scripts/radarChart.js"></script>
-		<script src="scripts/tempData.js"></script> -->
+		<script src="scripts/radarChart.js"></script>
+		<script src="scripts/tempData.js"></script>
 	</body>
 </html>

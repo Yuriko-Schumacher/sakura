@@ -67,9 +67,9 @@ install.packages("readxl")
 library("readxl")
 install.packages("weathermetrics")
 library(weathermetrics)
+library(lubridate)
 
 cb.raw <- read_excel("data/raw data/KyotoFullFlower7.xls")
-
 
 cb.cleaned <- cb.raw[-c(1:25), ] %>% 
   select(year = `Full-flowering dates of Japanese cherry (Prunus jamasakura) at Kyoto, Japan. (Latest version, Jun. 12, 2012)`,
@@ -82,15 +82,15 @@ cb.cleaned <- cb.raw[-c(1:25), ] %>%
          month = as.numeric(str_sub(date, end = 1)),
          day = as.numeric(str_sub(date, start = 2)))
 
-cb.al <- cb.cleaned %>% 
-  mutate(source_type = ifelse(source_type %in% c("1", "2", "3"), "1", source_type))
+# cb.al <- cb.cleaned %>% 
+#   mutate(source_type = ifelse(source_type %in% c("1", "2", "3"), "1", source_type))
 
 
-write_csv(cb.cleaned, "data/kyoto1200.csv")
+# write_csv(cb.cleaned, "data/kyoto1200.csv")
 
-ggplot(data = cb.cleaned,
-       mapping = aes(x = date_doy, y = -year)) +
-  geom_point()
+# ggplot(data = cb.cleaned,
+#        mapping = aes(x = date_doy, y = -year)) +
+#   geom_point()
 ```
 
 
@@ -117,11 +117,7 @@ mean.temp.final <- mean.temp.added %>%
 sakura <- cbind(cb.cleaned, mean.temp.final) %>% 
   select(-8)
 
-sakura.al <- cbind(cb.al, mean.temp.final) %>% 
-  select(-8)
-
 write_csv(sakura, "data/sakura.csv")
-write_csv(sakura.al, "data/sakura.al.csv")
 ```
 
 ```{r}
@@ -154,7 +150,7 @@ full.bloom.1953 <- rbind(full.bloom.gathered, kyoto_full.2021) %>%
     date = as.Date(date, format = "%Y-%m-%d"),
     date.jan1 = as.Date(paste(year, "-01-01", sep = ""), format = "%Y-%m-%d"),
     full_doy = as.numeric(date - date.jan1)) %>% 
-  select(year, full_doy)
+  select(date, year, full_doy)
 
 first.bloom.1953 <- rbind(first.bloom.gathered, kyoto_first.2021) %>% 
   mutate(
@@ -216,5 +212,49 @@ cb.final <- cbind(cb.full, temp.spread, monthly.spread) %>%
   select(-4, -20)
 
 write_csv(cb.final, "data/temp_merged.csv")
+```
+
+```{r}
+cb <- cb.cleaned %>% 
+  mutate(month = ifelse(month == 3, "Mar", ifelse(month == 4, "Apr", "May"))) %>% 
+  select(year, date_doy, month, day, source_type, source)
+
+cb <- cb[-c(1153:1215),]
+
+full <- rbind(full.bloom.gathered, kyoto_full.2021) %>% 
+  mutate(
+    date = as.Date(date, format = "%Y-%m-%d"),
+    date.jan1 = as.Date(paste(year, "-01-01", sep = ""), format = "%Y-%m-%d"),
+    full_doy = as.numeric(date - date.jan1)) %>% 
+  select(year, full_doy, date) %>% 
+  rename(date_doy = full_doy) %>% 
+  mutate(month = month(date, label = TRUE, abbr = TRUE),
+         day = day(date)) %>% 
+  select(-date)
+
+full$source_type <- 0
+full$source <- "Japan Meteorological Agency"
+
+sakura_new <- 
+  rbind(cb, full)
+
+# add temperature data
+kyoto.march.mean.temp <- read_csv("data/kyoto-march-mean-temperature.csv") %>% 
+  mutate(year = str_sub(year, end = 4)) %>% 
+  rename(tempC = avg_temp)
+
+mean.temp <- mean.temp[-c(1081:1211), ]
+
+temp <- rbind(mean.temp, kyoto.march.mean.temp) %>% 
+    mutate(
+    year = as.numeric(year),
+    tempC = as.numeric(tempC),
+    tempF = celsius.to.fahrenheit(tempC, round = 2))
+
+sakura_new <- cbind(sakura_new, temp) 
+sakura_new <- sakura_new %>% 
+  select(-7)
+
+write_csv(sakura_new, "data/sakura.csv") 
 ```
 
