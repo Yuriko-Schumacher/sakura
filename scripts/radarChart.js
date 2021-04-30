@@ -82,29 +82,8 @@ function drawPetals(monthlyData, selection) {
 
 	let colorScale = d3
 		.scaleSequential()
-		.domain([1880, 2022])
+		.domain([1800, 2022])
 		.interpolator(d3.interpolateRdPu);
-
-	// const radialGradient = svg
-	// 	.selectAll("defs")
-	// 	.data(tempD)
-	// 	.join("defs")
-	// 	.append("linearGradient")
-	// 	.attr("id", "linear-gradient")
-	// 	.attr("x1", 0)
-	// 	.attr("y1", 0)
-	// 	.attr("x2", (d) => xScale(d.month))
-	// 	.attr("y2", "100%")
-	// 	.selectAll("stop")
-	// 	.data([
-	// 		{ offset: "0%", color: "rgba(255, 255, 255)" },
-	// 		{ offset: "50%", color: "rgba(255, 183, 197)" },
-	// 		{ offset: "100%", color: "rgba(250, 89, 120)" },
-	// 	])
-	// 	.enter()
-	// 	.append("stop")
-	// 	.attr("offset", (d) => d.offset)
-	// 	.attr("stop-color", (d) => d.color);
 
 	let petalG = sel
 		.append("g")
@@ -123,9 +102,10 @@ function drawPetals(monthlyData, selection) {
 		.attr("cy", (d) => yScale(d.avg_tempC) / 2)
 		.attr("r", (d) => yScale(d.avg_tempC) / 2)
 		.attr("fill", (d) => colorScale(d.year))
-		.attr("fill-opacity", 0.5)
-		.attr("stroke", "rgb(252, 195, 195)")
-		.attr("stroke-width", 0.5);
+		.attr("fill-opacity", 0.3)
+		.attr("stroke", (d) => colorScale(d.year))
+		.attr("stroke-width", 0.5)
+		.attr("stroke-opacity", 0.3);
 }
 
 function drawRadarChart(seasonalData, selection) {
@@ -140,7 +120,7 @@ function drawRadarChart(seasonalData, selection) {
 
 	let xScale = d3
 		.scaleBand()
-		.domain(tempD.map((d) => d.season))
+		.domain(tempD.map((d) => d.month))
 		.range([0, 2 * Math.PI]);
 
 	let yScale = d3
@@ -156,21 +136,21 @@ function drawRadarChart(seasonalData, selection) {
 		.join("g")
 		.attr(
 			"transform",
-			(d) => `rotate(${(xScale(d.season) * 180) / Math.PI + 216})`
+			(d) => `rotate(${(xScale(d.month) * 180) / Math.PI + 216})`
 		);
 
 	threadG
 		.append("line")
 		.attr("x1", 0)
 		.attr("y1", 0)
-		.attr("x2", (d) => xScale(d.season))
+		.attr("x2", (d) => xScale(d.month))
 		.attr("y2", (d) => yScale(d.avg_tempC))
 		.attr("stroke", "rgba(211, 24, 66, 0.8)")
 		.attr("stroke-width", 0.8);
 
 	threadG
 		.append("circle")
-		.attr("cx", (d) => xScale(d.season))
+		.attr("cx", (d) => xScale(d.month))
 		.attr("cy", (d) => yScale(d.avg_tempC))
 		.attr("fill", "rgb(211 24 66)")
 		.attr("r", 0.8);

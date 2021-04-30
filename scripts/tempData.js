@@ -76,9 +76,21 @@ Promise.all([
 			d3.select(".rader-tooltip").style("visibility", "hidden");
 		})
 		.on("click", function (e, d) {
+			containerG
+				.selectChildren("g")
+				.selectAll("circle")
+				.attr("fill-opacity", 0.3)
+				.attr("stroke-width", 0.5)
+				.attr("stroke-opacity", 0.3);
+
+			d3.select(this)
+				.selectAll("circle")
+				.attr("fill-opacity", 1)
+				.attr("stroke-width", 5)
+				.attr("stroke-opacity", 1);
 			containerZoomedG.select(".petals").remove();
 			containerZoomedG.select(".threads").remove();
-			containerZoomedG.select(".rader-zoomed__text").remove();
+			containerZoomedG.selectAll(".rader-zoomed__text").remove();
 			let index = groupedMonthlyTempD.findIndex(
 				(group) => group[0] === d.year
 			);
@@ -87,8 +99,17 @@ Promise.all([
 				.classed("rader-zoomed__text", true)
 				.append("text")
 				.attr("x", -20)
-				.attr("y", -50)
+				.attr("y", -60)
 				.text(d.year);
+
+			containerZoomedG
+				.append("g")
+				.classed("rader-zoomed__text", true)
+				.append("text")
+				.attr("transform", "scale(0.3)")
+				.attr("x", -120)
+				.attr("y", -150)
+				.text(`Full-bloom: ${d.full_doy} days after Jan. 1`);
 			drawPetals(groupedMonthlyTempD[index], containerZoomedG);
 			drawRadarChart(groupedSeasonalTempD[index], containerZoomedG);
 
@@ -96,7 +117,6 @@ Promise.all([
 				.select(".petals")
 				.selectChildren("g")
 				.on("mouseover", function (e, d) {
-					console.log(d);
 					containerZoomedG
 						.select(".petals")
 						.selectAll("g")
@@ -106,9 +126,24 @@ Promise.all([
 						.selectAll("g")
 						.style("opacity", 0.1);
 					d3.select(this).style("opacity", 1).style("z-index", 2);
+					d3.select(".rader-zoomed-tooltip")
+						.style("top", "500px")
+						.style("left", "200px")
+						.style("visibility", "visible")
+						.html(
+							`<b>${d.month}</b><br>Avg. temp: <b>${
+								Math.round(
+									((9 * d.avg_tempC + 32 * 5) / 5) * 10
+								) / 10
+							}</b> (F)`
+						);
 				})
 				.on("mouseout", function (e, d) {
 					containerZoomedG.selectAll("g").style("opacity", 1);
+					d3.select(".rader-zoomed-tooltip").style(
+						"visibility",
+						"hidden"
+					);
 				});
 			containerZoomedG
 				.select(".threads")
@@ -124,9 +159,24 @@ Promise.all([
 						.selectAll("g")
 						.style("opacity", 0.1);
 					d3.select(this).style("opacity", 1).style("z-index", 2);
+					d3.select(".rader-zoomed-tooltip")
+						.style("top", "500px")
+						.style("left", "200px")
+						.style("visibility", "visible")
+						.html(
+							`<b>${d.month}</b><br>Avg. temp: <b>${
+								Math.round(
+									((9 * d.avg_tempC + 32 * 5) / 5) * 10
+								) / 10
+							}</b> (F)`
+						);
 				})
 				.on("mouseout", function (e, d) {
 					containerZoomedG.selectAll("g").style("opacity", 1);
+					d3.select(".rader-zoomed-tooltip").style(
+						"visibility",
+						"hidden"
+					);
 				});
 		});
 });

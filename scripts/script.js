@@ -305,8 +305,8 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
     (March 28th, 86 days after January 1st). In 2021,
     cherry blossoms in Kyoto peaked earliest on record,
     fully-blooming on March 26th (84 days after January
-    1st).<br><br> After 1900, XXX% of full-blooming occurred
-    after the average date until that year.`);
+    1st).<br><br> After 1900, out of 122 years of data, 105 years of full-blooming occured
+    before the average date (105 days after Jan. 1) until that year.`);
 
 		d3.selectAll(".histogram-petal")
 			.on("mouseover", function (e, d) {

@@ -18,9 +18,51 @@
 			<svg id="test"></svg>
 		</section> -->
 		<section id="intro">
-			<h1>
-				Cherry blossom’s full-bloom date in Kyoto, Japan for 1200 years
-			</h1>
+			<article>
+				<h1>
+					1200 years of cherry blossom’s full-bloom dates in Kyoto,
+					Japan
+				</h1>
+				<p><b>April 2021　By Yuriko Schumacher</b></p>
+				<p>
+					This spring, cherry blossoms saw the record earliest
+					full-blooming in Kyoto, Japan. There are many news reports,
+					including one by
+					<a
+						href="https://www.washingtonpost.com/weather/2021/03/29/japan-kyoto-cherry-blossoms-record/"
+						target="_blank"
+						>The Washington Post</a
+					>
+					and
+					<a
+						href="https://www.bbc.com/news/world-asia-56574142"
+						target="_blank"
+						>BBC</a
+					>. These articles tell concerns about the trend of blooming
+					getting earlier and earlier, which they say is a sign of
+					climate change.
+				</p>
+				<p>
+					In this project I'm going to visualize cherry blossom's
+					full-bloom dates since 812 in Kyoto Japan.
+				</p>
+				<p>
+					Data are
+					<a
+						href="http://atmenv.envi.osakafu-u.ac.jp/aono/kyophenotemp4/"
+						target="_blank"
+						>released</a
+					>
+					by Yasuyuki Aono, a professor at Osaka Prefecture
+					University. I also combine temperature data downloaded
+					through Japan Meteorological Agency's
+					<a
+						href="https://www.data.jma.go.jp/gmd/risk/obsdl/index.php"
+						target="_blank"
+						>downloading system</a
+					>.
+				</p>
+			</article>
 		</section>
 
 		<section id="kyoto1200">
@@ -59,6 +101,10 @@
 						November, mid-November, late November, ... to late
 						March).
 					</p>
+					<p>
+						I'm going to represent the temperatrue data as a form of
+						flower.
+					</p>
 				</article>
 			</div>
 			<div id="rader-sample">
@@ -77,13 +123,19 @@
 						</p>
 					</div>
 					<div class="step" data-index="1">
-						<p>This petal shows average temperature in November.</p>
+						<p>
+							The size of this petal is encoded as average
+							temperature in November.
+						</p>
 					</div>
 					<div class="step" data-index="2">
 						<p>This shows average temperature in March.</p>
 					</div>
 					<div class="step" data-index="3">
-						<p>Each thred represents 10-day average temperature.</p>
+						<p>
+							The length of each thred represents 10-day average
+							temperature.
+						</p>
 					</div>
 					<div class="step" data-index="4">
 						<p>From early November to...</p>
@@ -101,11 +153,12 @@
 			</div>
 			<div id="rader-chart__container">
 				<div id="rader-chart"><div class="rader-tooltip"></div></div>
-				<div id="rader-zoomed-chart"></div>
+				<div id="rader-zoomed-chart">
+					<div class="rader-zoomed-tooltip"></div>
+				</div>
 			</div>
 		</section>
 		<script src="scripts/script.js"></script>
-		<!-- <script src="scripts/script-test.js"></script> -->
 		<script src="scripts/radarChart.js"></script>
 		<script src="scripts/tempData.js"></script>
 	</body>

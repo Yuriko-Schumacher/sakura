@@ -65,7 +65,7 @@ t.test(date ~ year, data = sakura.paired, paired = TRUE)
 ```{r}
 install.packages("readxl")
 library("readxl")
-install.packages("weathermetrics")
+
 library(weathermetrics)
 library(lubridate)
 
@@ -186,7 +186,7 @@ seasons <- c("early_Nov", "mid_Nov", "late_Nov", "early_Dec", "mid_Dec",
          "mid_Feb", "late_Feb", "early_Mar", "mid_Mar", "late_Mar")
 
 seasonal <- kyoto.temp %>% 
-  mutate(season = seasons[as.numeric(interval)]) %>% 
+  mutate(month = seasons[as.numeric(interval)]) %>% 
   select(-interval)
 
 write_csv(seasonal, "data/seasonal-temp.csv")
@@ -256,5 +256,12 @@ sakura_new <- sakura_new %>%
   select(-7)
 
 write_csv(sakura_new, "data/sakura.csv") 
+```
+
+```{r}
+sakura_new %>% 
+  mutate(year = as.numeric(year)) %>% 
+  filter(year >= 1900) %>% 
+  filter(date_doy < 105.2)
 ```
 

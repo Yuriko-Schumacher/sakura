@@ -17,10 +17,26 @@ body {
 	color: #ccc; */
 }
 
+a:link,
+a:visited {
+	font-weight: bold;
+	color: #ff0080;
+}
+
+a:hover {
+	color: #fee3e9;
+	transition: all 0.4s ease;
+}
+
+h1 {
+	font-size: 3em;
+	line-height: 1;
+}
+
 #intro {
 	width: 80%;
 	max-width: 800px;
-	margin: 0 auto;
+	margin: 0 auto 5em;
 	min-height: 70vh;
 }
 
@@ -111,7 +127,8 @@ body {
 
 .histogram-tooltip,
 .scatterplot-tooltip,
-.rader-tooltip {
+.rader-tooltip,
+.rader-zoomed-tooltip {
 	position: absolute;
 	z-index: 2;
 	top: 0;
@@ -180,4 +197,8 @@ article {
 
 .rader-zoomed__text {
 	transform: scale(0.3);
+}
+
+#rader-zoomed-chart {
+	position: relative;
 }
