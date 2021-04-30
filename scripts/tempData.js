@@ -127,7 +127,7 @@ Promise.all([
 						.style("opacity", 0.1);
 					d3.select(this).style("opacity", 1).style("z-index", 2);
 					d3.select(".rader-zoomed-tooltip")
-						.style("top", "60vh")
+						.style("top", "70vh")
 						.style("left", "200px")
 						.style("visibility", "visible")
 						.html(
@@ -160,7 +160,7 @@ Promise.all([
 						.style("opacity", 0.1);
 					d3.select(this).style("opacity", 1).style("z-index", 2);
 					d3.select(".rader-zoomed-tooltip")
-						.style("top", "60vh")
+						.style("top", "70vh")
 						.style("left", "200px")
 						.style("visibility", "visible")
 						.html(
