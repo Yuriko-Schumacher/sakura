@@ -40,6 +40,7 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 		});
 		filteredData.forEach(parseData);
 		console.log(filteredData);
+		const availableYears = filteredData.map((d) => d.year);
 
 		let groupedByDate = d3.group(filteredData, (d) => d.date_doy);
 		groupedByDate = Array.from(groupedByDate);
@@ -367,22 +368,33 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 			});
 
 		draggableLine.call(
-			d3.drag().on("drag", function (event) {
-				d3.select(this).attr("y1", event.y).attr("y2", event.y);
-				let selectedYear =
-					Math.round(yScaleSub.invert(event.y) / 5) * 5;
-				let petalToJump = document
-					.querySelector(".container-scatterplot")
-					.querySelector(`#scatterplot-${selectedYear}`);
-				if (petalToJump === null) {
-					return;
-				} else {
+			d3
+				.drag()
+				.on("drag", function (event) {
+					d3.select(this).attr("y1", event.y).attr("y2", event.y);
+				})
+				.on("end", function (event) {
+					let selectedYear = Math.round(yScaleSub.invert(event.y));
+					let petalToJump = document
+						.querySelector(".container-scatterplot")
+						.querySelector(`#scatterplot-${selectedYear}`);
+					if (petalToJump === null) {
+						selectedYear = availableYears.reduce((prev, curr) => {
+							return Math.abs(curr - selectedYear) <
+								Math.abs(prev - selectedYear)
+								? curr
+								: prev;
+						});
+						petalToJump = document
+							.querySelector(".container-scatterplot")
+							.querySelector(`#scatterplot-${selectedYear}`);
+					}
+
 					petalToJump.scrollIntoView({
 						block: "center",
 						inline: "nearest",
 					});
-				}
-			})
+				})
 		);
 		const histogramContainer = document.querySelector(
 			"g.container-histogram"
