@@ -371,9 +371,16 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 			d3
 				.drag()
 				.on("drag", function (event) {
-					d3.select(this).attr("y1", event.y).attr("y2", event.y);
+					let y = event.y;
+					if (y < yScaleSub(812)) {
+						y = yScaleSub(812);
+					} else if (y > yScaleSub(2021)) {
+						y = yScaleSub(2021);
+					}
+					d3.select(this).attr("y1", y).attr("y2", y);
 				})
 				.on("end", function (event) {
+					d3.select(this).classed("dragged", true);
 					let selectedYear = Math.round(yScaleSub.invert(event.y));
 					let petalToJump = document
 						.querySelector(".container-scatterplot")
@@ -389,11 +396,13 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 							.querySelector(".container-scatterplot")
 							.querySelector(`#scatterplot-${selectedYear}`);
 					}
-
 					petalToJump.scrollIntoView({
 						block: "center",
 						inline: "nearest",
 					});
+					setTimeout(() => {
+						d3.select(this).classed("dragged", false);
+					}, 1000);
 				})
 		);
 		const histogramContainer = document.querySelector(
@@ -409,10 +418,14 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 				histogramPetalEl.parentElement.classList.add(
 					"histogram-petal-active"
 				);
-				d3.select("#draggable-line")
-					.transition()
-					.attr("y1", yScaleSub(id))
-					.attr("y2", yScaleSub(id));
+				if (draggableLine.classed("dragged")) {
+					return;
+				} else {
+					draggableLine
+						.transition()
+						.attr("y1", yScaleSub(id))
+						.attr("y2", yScaleSub(id));
+				}
 			},
 			exit: function (el) {
 				let id = el.children[0].getAttribute("id").slice(12);
@@ -422,10 +435,14 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 				histogramPetalEl.parentElement.classList.remove(
 					"histogram-petal-active"
 				);
-				d3.select("#draggable-line")
-					.transition()
-					.attr("y1", yScaleSub(id))
-					.attr("y2", yScaleSub(id));
+				if (draggableLine.classed("dragged")) {
+					return;
+				} else {
+					draggableLine
+						.transition()
+						.attr("y1", yScaleSub(id))
+						.attr("y2", yScaleSub(id));
+				}
 			},
 			offset: 0.7,
 		});
