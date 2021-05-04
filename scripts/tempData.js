@@ -37,7 +37,6 @@ Promise.all([
 	let bloomingD = datasets[0];
 	bloomingD = bloomingD.map((d) => parseBloomingD(d));
 	bloomingD = bloomingD.filter((d) => d.full_doy !== "NA");
-	console.log(bloomingD);
 
 	let seasonalTempD = datasets[1];
 	seasonalTempD = seasonalTempD.map((d) => parseTempD(d));
@@ -149,7 +148,6 @@ Promise.all([
 				.select(".threads")
 				.selectChildren("g")
 				.on("mouseover", function (e, d) {
-					console.log(d);
 					containerZoomedG
 						.select(".petals")
 						.selectAll("g")
