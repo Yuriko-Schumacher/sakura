@@ -331,7 +331,7 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 					)
 					.style("visibility", "visible")
 					.html(
-						`Year: <b>${d.year}</b><br>Full-bloom date: <b>${d.month} ${d.day}</b><br>Temperature: <b>${d.tempF}(F)</b><br>Source: <b>${d.source}</b><br>`
+						`Year: <b>${d.year}</b><br>Full-bloom date: <b>${d.month} ${d.day}</b><br>Temperature: <b>${d.tempF} (F)</b><br>Source: <b>${d.source}</b><br>`
 					);
 			})
 			.on("mouseout", function () {
