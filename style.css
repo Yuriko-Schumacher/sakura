@@ -91,6 +91,11 @@ h1 {
 	position: relative;
 }
 
+.x-axis-label {
+	font-size: 0.6em;
+	text-anchor: end;
+}
+
 .y-axis-s > path,
 .y-axis-s > * > line {
 	opacity: 0;

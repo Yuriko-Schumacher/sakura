@@ -197,6 +197,11 @@ Promise.all([d3.csv("data/sakura.csv"), d3.text("asset/petal.svg")]).then(
 			.classed("axis", true)
 			.attr("transform", `translate(0, ${windowH * 0.3 - margin.b})`)
 			.call(xAxisBottom);
+		containerHG
+			.append("text")
+			.classed("x-axis-label", true)
+			.attr("transform", `translate(${w - 20}, ${windowH * 0.3 - 20})`)
+			.text("(days after Jan. 1)");
 
 		let yAxisH = d3.axisLeft(yScaleHistogram).ticks(5);
 		containerHG
