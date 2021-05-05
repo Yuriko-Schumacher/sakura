@@ -13,8 +13,6 @@ body {
 	font-family: "Noto Serif JP", serif;
 	font-size: 18px;
 	scroll-behavior: smooth;
-	/* background: navy;
-	color: #ccc; */
 }
 
 a:link,
@@ -50,7 +48,7 @@ h1 {
 	height: 100vh;
 	position: sticky;
 	top: 0;
-	background-color: rgba(211, 211, 211, 0.3);
+	background-color: #f2f2f2;
 }
 
 .label,
@@ -60,6 +58,7 @@ h1 {
 
 .legendTitle,
 .angle-legend-title {
+	font-weight: bold;
 	font-size: 0.8em;
 }
 
@@ -70,6 +69,7 @@ h1 {
 
 #main {
 	width: 70%;
+	background: white;
 }
 
 #kyoto1200__histogram {
@@ -106,7 +106,7 @@ h1 {
 	font-weight: bold;
 }
 
-.angle-legend,
+.angle-legend-petal,
 .scatterplot-petal,
 .histogram-petal {
 	transform-box: fill-box;
@@ -130,6 +130,10 @@ h1 {
 	opacity: 0;
 }
 
+.avg-text {
+	font-size: 10px;
+}
+
 .histogram-tooltip,
 .scatterplot-tooltip,
 .rader-tooltip,
@@ -150,6 +154,59 @@ article {
 	width: 80%;
 	max-width: 600px;
 	margin: 10em auto;
+}
+
+.go-back-to-top {
+	text-align: center;
+}
+
+@media (max-width: 576px) {
+	h1 {
+		font-size: 2em;
+	}
+
+	#kyoto1200 {
+		display: block;
+	}
+
+	#main {
+		width: 100%;
+	}
+
+	#sub {
+		height: 95px;
+		width: 100px;
+		position: sticky;
+		top: 0;
+		left: calc(100vw - 100px);
+		z-index: 99;
+	}
+
+	.container-sub {
+		transform: scale(0.5);
+	}
+
+	.legendTitle,
+	.angle-legend-title {
+		font-size: 0.9em;
+	}
+
+	.label,
+	.angle-legend-label {
+		font-size: 16px;
+	}
+
+	.count {
+		font-size: 0.4em;
+	}
+
+	#kyoto1200__scatterplot {
+		height: calc(70vh + 3000px);
+	}
+
+	article {
+		margin: 7em auto;
+	}
 }
 
 /* ------------- RADAR ------------- */
