@@ -17,54 +17,57 @@
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<!-- <section>
-			<svg id="test"></svg>
-		</section> -->
+		<div id="nav">
+			<a href="https://gobserver.net/"
+				><img
+					class="logo"
+					src="asset/GO_logo.png"
+					alt="Logo of The Global Observer"
+					height="45"
+			/></a>
+		</div>
 		<section id="intro">
 			<article>
 				<h1>
-					1200 years of cherry blossom’s full-bloom dates in Kyoto,
+					1,200 years of cherry blossom’s full-bloom dates in Kyoto,
 					Japan
 				</h1>
-				<p><b>Spring 2021　By Yuriko Schumacher</b></p>
 				<p>
-					This spring, cherry blossoms peaked the record earliest in
-					Kyoto, Japan.
+					<a
+						href="https://gobserver.net/staff_name/yuriko-schumacher/"
+						>Yuriko Schumacher</a
+					><br />June, 2021
 				</p>
+
 				<p>
-					The visualization below shows cherry blossom's full-blooming
-					(peak) dates since 812 in Kyoto, Japan. Data are
+					This spring, cherry blossoms saw the peak blooming on March
+					26th in the city of Kyoto, Japan, according to Japan
+					Meteorological Agency. This was the record earliest since
+					812 A.D., according to data
 					<a
 						href="http://atmenv.envi.osakafu-u.ac.jp/aono/kyophenotemp4/"
 						target="_blank"
 						>released</a
 					>
 					by Yasuyuki Aono, a professor at Osaka Prefecture
-					University. They identified the full-blooming dates "from
-					old documents."
+					University.
 				</p>
 				<p>
-					Each petal represents each year's full-blooming date
-					(converted into day of year, a number of days after January
-					1st). The petals pile up to formulate a histogram as you
-					scroll down to see data for later years.
+					Professor Aono's team identified the full-blooming dates in
+					ancient times "from old documents," such as diaries by
+					Emperors and historical documents created by governors.
 				</p>
 				<p>
-					Years are encoded as colors, while angle of the petals are
-					representations of the year's (estimated) average
-					temperature in March. Professor Aono estimated the average
-					temperature in ancient times, based on full-blooming dates.
+					The flowering of cherry blossoms has an extremely
+					significant meaning in Japanese spring. Many people like to
+					gather around cherry blossoms to eat, drink, and take
+					photos. The flowers are also the simbol of graduation and
+					entrance ceremonies, since Japanese academic year ends in
+					March and starts in April.
 				</p>
 				<p>
-					Temperature data after 1880 as well as full-blooming date
-					after 1953 are based on the official data from Japan
-					Meteorological Agency. Data were downloaded through the
-					agency's
-					<a
-						href="https://www.data.jma.go.jp/gmd/risk/obsdl/index.php"
-						target="_blank"
-						>downloading system</a
-					>.
+					In recent decades, full-blooming has been getting earlier
+					and earlier, the data show.
 				</p>
 			</article>
 		</section>
@@ -75,11 +78,122 @@
 				<div id="kyoto1200__histogram">
 					<div class="histogram-tooltip"></div>
 				</div>
+				<div id="explanation" class="scrolly">
+					<div class="step" data-index="0">
+						<p>
+							This chart shows cherry blossom's peak dates from
+							812 to 2021. Cherry blossom petals are placed to
+							represent full-blooming dates, having x-axis for the
+							number of days after January 1st, and y-axis for the
+							year.
+						</p>
+						<p>
+							A zoomed-in version will be shown after this
+							introduction. The gray bar will indicate the year
+							that is in view, on the zoomed-in version of the
+							chart. By dragging and dropping the bar, the page
+							will scroll to the year the bar is dropped on.
+						</p>
+						<div class="scrollButton">
+							<span></span><span></span><span></span>
+						</div>
+					</div>
+					<div class="step" data-index="1">
+						<p>Petal colors represent year.</p>
+						<div class="scrollButton">
+							<span></span><span></span><span></span>
+						</div>
+					</div>
+					<div class="step" data-index="2">
+						<p>
+							Angles of petals indicate the year's average March
+							temperature data (F).
+							<a
+								href="http://atmenv.envi.osakafu-u.ac.jp/aono/kyophenotemp4/"
+								target="_blank"
+								>Professor Aono's team estimated</a
+							>
+							average March temperatures of ancient years, based
+							on cherry blossom's full-blooming date.
+						</p>
+						<p>
+							From 812 to 1879, the angles represent those
+							estimated temperature data. From 1880 to present,
+							temperature data are actually observed ones,
+							revealed by
+							<a
+								href="https://www.data.jma.go.jp/obd/stats/etrn/index.php"
+								target="_blank"
+								>Japan Meteorological Agency</a
+							>.
+						</p>
+						<div class="scrollButton">
+							<span></span><span></span><span></span>
+						</div>
+					</div>
+					<div class="step" data-index="3">
+						<p>
+							This chart will form a histogram showing the number
+							of observations of first-blooming dates.
+						</p>
+						<div class="scrollButton">
+							<span></span><span></span><span></span>
+						</div>
+					</div>
+					<div class="step" data-index="4">
+						<h2>Cherry blossom's full-blooming date in Kyoto</h2>
+						<div class="scrollButton">
+							<span></span><span></span><span></span>
+						</div>
+					</div>
+				</div>
 				<div id="kyoto1200__scatterplot">
 					<div class="scatterplot-tooltip"></div>
+					<div class="scatterplot-annotation__point"></div>
+					<div class="scatterplot-annotation__line"></div>
 				</div>
 			</div>
 		</section>
+		<section id="tile">
+			<article>
+				<p>
+					In 2018, full-blooming was the earliest tie at that time
+					(March 28th, 86 days after January 1st). The previous record
+					was set in 1490.
+				</p>
+				<p>
+					In modern times, when more accurately measured data are
+					available, cherry blossoms in Kyoto appear to see the
+					full-bloom earlier and earlier over the years.
+				</p>
+				<div id="tile"></div>
+				<p>
+					After 1900, out of 122 years of data, 99 years of
+					full-blooming occured before the median date (104 days after
+					Jan. 1) until 1899.
+				</p>
+				<img src="asset/Tile chart.png" alt="" />
+				<p>
+					After 1900, the median full-blooming date is 98 days after
+					January 1st -- six days before the median date from 812 to
+					1899.
+				</p>
+				<p>
+					In 2021, cherry blossoms in Kyoto peaked earliest ever on
+					record, fully-blooming on March 26th (84 days after January
+					1st).
+				</p>
+				<p><a href="#intro">Go back to top</a></p>
+			</article>
+		</section>
+		<div id="footer">
+			<a href="https://gobserver.net/"
+				><img
+					class="logo"
+					src="asset/GO_logo.png"
+					alt="Logo of The Global Observer"
+			/></a>
+		</div>
 		<!-- <section id="temp-analysis">
 			<div class="comment">
 				<article>
@@ -163,6 +277,7 @@
 				</div>
 			</div>
 		</section> -->
+		<script src="scripts/config.js"></script>
 		<script src="scripts/script.js"></script>
 		<!-- <script src="scripts/radarChart.js"></script>
 		<script src="scripts/tempData.js"></script> -->

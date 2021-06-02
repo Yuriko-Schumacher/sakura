@@ -36,7 +36,7 @@ mean.temp.final <- mean.temp.added %>%
 sakura <- cbind(cb.cleaned, mean.temp.final) %>% 
   select(-8)
 
-write_csv(sakura, "data/sakura.csv")
+# write_csv(sakura, "data/sakura.csv")
 ```
 
 ```{r}
@@ -130,7 +130,7 @@ write_csv(monthly.final, "data/monthly-temp.csv")
 cb.final <- cbind(cb.full, temp.spread, monthly.spread) %>% 
   select(-4, -20)
 
-write_csv(cb.final, "data/temp_merged.csv")
+# write_csv(cb.final, "data/temp_merged.csv")
 ```
 
 ```{r}
@@ -209,13 +209,81 @@ sakura_new <- sakura_new %>%
 sakura_new <- sakura_new %>% 
   mutate(doy_100yr = rollmean(date_doy, k = 100, fill = date_doy, align = "right", na.rm = TRUE))
 
-write_csv(sakura_new, "data/sakura.csv") 
+# write_csv(sakura_new, "data/sakura.csv") 
 ```
 
 ```{r}
-sakura_new %>% 
+sakura1500_1900 <- sakura_new %>% 
+  mutate(year = as.numeric(year)) %>% 
+  filter(year >= 1500 & year <= 1900) 
+
+summary(sakura1500_1900)
+
+sakura_ancient <- sakura_new %>% 
+  mutate(year = as.numeric(year)) %>% 
+  filter(year < 1900) %>% 
+  group_by(date_doy) %>% 
+  summarize(Count = n()) %>% 
+  mutate(time = "ancient")%>% 
+  filter(!is.na(date_doy))
+
+sakura_modern <- sakura_new %>% 
   mutate(year = as.numeric(year)) %>% 
   filter(year >= 1900) %>% 
-  filter(date_doy < 105.2)
+  group_by(date_doy) %>% 
+  summarize(Count = n()) %>% 
+  mutate(time = "modern")%>% 
+  filter(!is.na(date_doy))
+
+sakura_modern %>% 
+  summarize(median = median(date_doy))
+
+sakura_new %>% 
+  mutate(year = as.numeric(year)) %>% 
+  filter(year >= 1900)  %>% 
+  filter(date_doy < 105)
+
+sakura_paired <- rbind(sakura_ancient, sakura_modern) %>% 
+  mutate(date_doy = as.numeric(date_doy)) %>% 
+  filter(!is.na(date_doy))
+
+ggplot(data = sakura_ancient,
+       mapping = aes(x = date_doy, y = time, fill = Count)) + 
+  geom_tile(color = "#3e3d3d", size = 0.3) +
+  scale_fill_gradient(high = "#F880AA", low = "#FFF7F3") +
+  coord_equal() +
+  labs(x = "Days after Jan. 1", y = "") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        axis.text.y = element_blank()) 
+
+ggplot(data = sakura_modern,
+       mapping = aes(x = date_doy, y = time, fill = Count)) + 
+  geom_tile(color = "#3e3d3d", size = 0.3) +
+  scale_fill_gradient(high = "#F880AA", low = "#FFF7F3") +
+  coord_equal() +
+  labs(x = "Days after Jan. 1", y = "") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        axis.text.y = element_blank()) 
+
+ggplot(data = sakura_paired,
+       mapping = aes(x = date_doy, y = time, fill = Count)) + 
+  geom_tile(color = "#3e3d3d", size = 0.3) +
+  scale_fill_gradient(high = "#F880AA", low = "#FFF7F3") +
+  coord_equal() +
+  labs(x = "Days after Jan. 1", y = "") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        axis.text.y = element_blank()) 
+
+install.packages("svglite")
+library(svglite)
+
+ggsave("ancient.svg")
+
+ggplot(data = sakura_paired, mapping = aes(x = date_doy)) +
+  geom_histogram(binwidth = 4) +
+  facet_wrap(vars(time))
 ```
 
