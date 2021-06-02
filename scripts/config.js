@@ -8,23 +8,22 @@ const annotation = [
 	{
 		year: 961,
 		comment:
-			"This was the earliest full-blooming (March 28th) for 423 years, from 812 to 1235.",
+			"This was the earliest full-blooming for 423 years, from 812 to 1235.",
 		category: "point",
 	},
 	{
 		year: 1084,
-		comment:
-			"Latest full-blooming (April 29th) for 510 years, from 812 to 1322.",
+		comment: "Latest full-bloomingfor 510 years, from 812 to 1322.",
 		category: "point",
 	},
 	{
 		year: 1323,
-		comment: "Latest full-blooming (May 4th) ever recorded.",
+		comment: "Latest full-blooming ever recorded.",
 		category: "point",
 	},
 	{
 		year: 1409,
-		comment: "Earliest full-blooming (March 27th) until 2002.",
+		comment: "Earliest full-blooming until 2002.",
 		category: "point",
 	},
 	{
@@ -47,7 +46,7 @@ const annotation = [
 	},
 	{
 		year: 2021,
-		comment: "Earliest full-blooming (March 26th) ever recorded",
+		comment: "Earliest full-blooming ever recorded.",
 		category: "point",
 	},
 ];
