@@ -13,7 +13,7 @@ const annotation = [
 	},
 	{
 		year: 1084,
-		comment: "Latest full-bloomingfor 510 years, from 812 to 1322.",
+		comment: "Latest full-blooming for 510 years, from 812 to 1322.",
 		category: "point",
 	},
 	{
@@ -35,13 +35,13 @@ const annotation = [
 	{
 		year: 1880,
 		comment:
-			"From 1880 to present, the temperature data are actually observed ones, obtained from Japan Meteorological Agency.",
+			"From 1880 to present, the temperature data are actually observed ones, obtained from the Japan Meteorological Agency.",
 		category: "line",
 	},
 	{
 		year: 1953,
 		comment:
-			"From 1953 to present, the data about full-blooming date are obtained from Japan Meteorological Agency.",
+			"From 1953 to present, data about full-blooming dates are obtained from the Japan Meteorological Agency.",
 		category: "line",
 	},
 	{
