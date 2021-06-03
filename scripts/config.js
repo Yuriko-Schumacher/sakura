@@ -7,8 +7,7 @@ const annotation = [
 	},
 	{
 		year: 961,
-		comment:
-			"This was the earliest full-blooming for 423 years, from 812 to 1235.",
+		comment: "Earliest full-blooming for 423 years, from 812 to 1235.",
 		category: "point",
 	},
 	{
@@ -29,13 +28,13 @@ const annotation = [
 	{
 		year: 1510,
 		comment:
-			"From 1500 to 1900, the majority (75%) of first-blooming happened between 102 to 110 days after Jan. 1 (from April 11 to 20).",
+			"From 1500 to 1900, three-quarters of peak-blooming happened between 102 to 110 days after Jan. 1 (from April 11 to 20).",
 		category: "line",
 	},
 	{
 		year: 1880,
 		comment:
-			"From 1880 to present, the temperature data are actually observed ones, obtained from the Japan Meteorological Agency.",
+			"From 1880 to present, the temperature data are recorded from the Japan Meteorological Agency, rather than estimated, as they were before these years by Professor Aono.",
 		category: "line",
 	},
 	{

@@ -41,10 +41,34 @@ p {
 
 img {
 	width: 100%;
+	display: block;
+	opacity: inherit;
 }
 
 #nav {
 	width: 300px;
+}
+
+#title {
+	height: calc(100vh - 45px);
+	display: flex;
+}
+
+#title > * {
+	width: 50%;
+}
+
+#title-headline {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 5em;
+}
+
+.title-deck {
+	width: 80%;
+	text-align: center;
 }
 
 #intro {
@@ -75,6 +99,15 @@ article {
 	background-color: #f2f2f2;
 }
 
+#sub-legend {
+	height: 220px;
+	padding: 0 50px;
+}
+
+#sub-chart {
+	height: calc(100vh - 220px);
+}
+
 g.color-legend,
 g.angle-legend,
 g.scatterplot-sub,
@@ -87,10 +120,28 @@ g.container-histogram {
 	font-size: 10px;
 }
 
-.legendTitle,
+.color-legend-title,
 .angle-legend-title {
 	font-weight: bold;
 	font-size: 0.8em;
+	margin-bottom: 0.2em;
+}
+
+.color-legend-ticks {
+	font-size: 10px;
+	display: flex;
+	justify-content: space-between;
+	opacity: inherit;
+	margin-bottom: 20px;
+}
+
+img.color-legend-img {
+	margin-top: 10px;
+}
+
+img.angle-legend-img {
+	width: 150px;
+	margin-top: 10px;
 }
 
 .axis-sub-label,
@@ -256,6 +307,7 @@ g.container-histogram {
 div.scrollButton {
 	padding-top: 80px;
 	position: relative;
+	transform: translateX(-34px);
 }
 
 div.scrollButton span {
@@ -269,8 +321,8 @@ div.scrollButton span {
 	border-bottom: 1px solid var(--font-gray);
 	-webkit-transform: rotate(-45deg);
 	transform: rotate(-45deg);
-	-webkit-animation: sdb 5s infinite;
-	animation: sdb 5s infinite;
+	-webkit-animation: sdb 2.5s infinite;
+	animation: sdb 2.5s infinite;
 	opacity: 0;
 	box-sizing: border-box;
 }

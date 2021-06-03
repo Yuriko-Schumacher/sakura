@@ -3,17 +3,32 @@ let windowW = window.innerWidth;
 
 const margin = { t: 25, r: 25, b: 50, l: 75 };
 const size = {
-	w: document.querySelector("#kyoto1200__scatterplot").clientWidth - 5,
+	w:
+		Math.floor(
+			document.querySelector("#kyoto1200__scatterplot").clientWidth
+		) - 1,
 	h: 3000,
 };
+
+const sizeTitleChart = {
+	w: Math.floor(document.querySelector("#title-chart").clientWidth) - 1,
+	h: Math.floor(document.querySelector("#title-chart").clientHeight) - 1,
+};
+
 const sizeSub = {
-	w: document.querySelector("#sub").clientWidth,
-	h: document.querySelector("#sub").clientHeight,
+	w: Math.floor(document.querySelector("#sub-chart").clientWidth) - 1,
+	h: Math.floor(document.querySelector("#sub-chart").clientHeight) - 1,
 };
 let petalSize = windowW > 576 ? windowW / 1425 : 0.5;
 
+const svgTitle = d3
+	.select("#title-chart")
+	.append("svg")
+	.attr("width", sizeTitleChart.w + 20)
+	.attr("height", sizeTitleChart.h);
+
 const svgSub = d3
-	.select("#sub")
+	.select("#sub-chart")
 	.append("svg")
 	.attr("width", sizeSub.w)
 	.attr("height", sizeSub.h);
@@ -30,6 +45,7 @@ const svgS = d3
 	.attr("width", size.w)
 	.attr("height", size.h);
 
+const containerTitleG = svgTitle.append("g").classed("container-title", true);
 const containerSubG = svgSub.append("g").classed("container-sub", true);
 const containerHG = svgH
 	.append("g")
@@ -88,15 +104,25 @@ function draw(data) {
 		.domain([83, 125])
 		.range([margin.l, size.w - margin.r]);
 
+	xScaleTitle = d3
+		.scaleLinear()
+		.domain([83, 125])
+		.range([20, sizeTitleChart.w + 20]);
+
 	xScaleSub = d3
 		.scaleLinear()
 		.domain([83, 125])
 		.range([margin.l, windowW * 0.3 - margin.r * 2]);
 
+	yScaleTitle = d3
+		.scaleLinear()
+		.domain([800, 2030])
+		.range([10, sizeTitleChart.h - 10]);
+
 	yScaleSub = d3
 		.scaleLinear()
 		.domain([800, 2030])
-		.range([220, windowH - margin.b]);
+		.range([margin.t, sizeSub.h - margin.b]);
 
 	yScaleHistogram = d3
 		.scaleLinear()
@@ -116,44 +142,108 @@ function draw(data) {
 	angleScale = d3
 		.scaleLinear()
 		.domain(d3.extent(filteredData, (d) => d.tempC))
-		.range([144, -144]);
+		.range([-144, 144]);
+
+	// ----------- TITLE -----------
+	let scatterplotTitleG = containerTitleG
+		.append("g")
+		.classed("scatterplot-title", true);
+
+	let petalTitleG = scatterplotTitleG
+		.selectAll("g.petal-title")
+		.data(filteredData)
+		.enter()
+		.append("g")
+		.classed("petal-title", true)
+		.attr(
+			"transform",
+			(d) =>
+				`translate(${xScaleTitle(d.date_doy)}, ${yScaleTitle(
+					d.year
+				)}) rotate(${angleScale(d.tempC)}) scale(${petalSize})`
+		);
+
+	petalTitleG
+		.append("use")
+		.attr("xlink:href", "#petal-svg")
+		.attr("fill", (d) => colorScale(d.year))
+		.attr("fill-opacity", 0.8)
+		.attr("stroke-width", 0.3)
+		.attr("stroke", "black")
+		.style("opacity", 0)
+		.transition()
+		.delay((d) => (d.year - 800) * 3)
+		.style("opacity", 1);
 
 	// ----------- SUB SVG -----------
-	let shapeWidth = windowW * 0.045 > 50 ? 50 : windowW * 0.045;
 
-	let colorLegend = d3
-		.legendColor()
-		.labelFormat(d3.format("d"))
-		.title("Year")
-		.shapeWidth(windowW > 576 ? shapeWidth : 50)
-		.cells(windowW > 576 ? 5 : 3)
-		.orient("horizontal")
-		.scale(colorScale);
-
-	containerSubG
+	let colorLegendG = d3
+		.select("#sub-legend")
 		.append("g")
-		.classed("color-legend sub sub-1", true)
-		.attr("transform", `translate(${windowW > 576 ? 30 : 20}, ${margin.t})`)
-		.call(colorLegend);
+		.classed("color-legend sub sub-1", true);
 
-	d3.select(".legendTitle").attr("transform", "translate(0, 10)");
+	colorLegendG
+		.append("text")
+		.classed("color-legend-title", true)
+		.attr("transform", `translate(${windowW > 576 ? 30 : 20}, 30)`)
+		.text("Year");
 
-	angles =
-		windowW > 650
-			? [
-					{ temp: 53.2, angle: -144 },
-					{ temp: 48.4, angle: -72 },
-					{ temp: 43.5, angle: 0 },
-					{ temp: 38.7, angle: 72 },
-					{ temp: 33.8, angle: 144 },
-			  ]
-			: [
-					{ temp: 53.2, angle: -144 },
-					{ temp: 43.5, angle: 0 },
-					{ temp: 33.8, angle: 144 },
-			  ];
+	colorLegendG
+		.append("img")
+		.classed("color-legend-img", true)
+		.attr("src", "asset/color-legend.png")
+		.attr("height", 15);
 
-	let angleLegendG = containerSubG
+	const colorLegendTicks =
+		windowW > 700 ? [812, 1114, 1417, 1719, 2021] : [812, 1417, 2021];
+
+	colorLegendG
+		.append("g")
+		.classed("color-legend-ticks", true)
+		.selectAll("g.color-legend-tick")
+		.data(colorLegendTicks)
+		.enter()
+		.append("g")
+		.classed("color-legend-tick", true)
+		.append("text")
+		.text((d) => d);
+
+	// let shapeWidth = windowW * 0.045 > 50 ? 50 : windowW * 0.045;
+
+	// let colorLegend = d3
+	// 	.legendColor()
+	// 	.labelFormat(d3.format("d"))
+	// 	.title("Year")
+	// 	.shapeWidth(windowW > 576 ? shapeWidth : 50)
+	// 	.cells(windowW > 576 ? 5 : 3)
+	// 	.orient("horizontal")
+	// 	.scale(colorScale);
+
+	// containerSubG
+	// 	.append("g")
+	// 	.classed("color-legend sub sub-1", true)
+	// 	.attr("transform", `translate(${windowW > 576 ? 30 : 20}, ${margin.t})`)
+	// 	.call(colorLegend);
+
+	// d3.select(".legendTitle").attr("transform", "translate(0, 10)");
+
+	// angles =
+	// 	windowW > 650
+	// 		? [
+	// 				{ temp: 53.2, angle: -144 },
+	// 				{ temp: 48.4, angle: -72 },
+	// 				{ temp: 43.5, angle: 0 },
+	// 				{ temp: 38.7, angle: 72 },
+	// 				{ temp: 33.8, angle: 144 },
+	// 		  ]
+	// 		: [
+	// 				{ temp: 53.2, angle: -144 },
+	// 				{ temp: 43.5, angle: 0 },
+	// 				{ temp: 33.8, angle: 144 },
+	// 		  ];
+
+	let angleLegendG = d3
+		.select("#sub-legend")
 		.append("g")
 		.classed("angle-legend sub sub-2", true);
 
@@ -162,54 +252,57 @@ function draw(data) {
 		.classed("angle-legend-title", true)
 		.attr(
 			"transform",
-			`translate(${windowW > 576 ? 30 : 20}, ${
-				windowW > 576 ? 140 : 120
-			})`
+			`translate(${windowW > 576 ? 30 : 20}, ${windowW > 576 ? 100 : 80})`
 		)
 		.text(
 			windowW > 650
-				? "Average March Temperature (F)"
-				: "Avg. March Temp (F)"
+				? "(Estimated) Average March Temperature (F)"
+				: "(Est.) Avg. March Temp (F)"
 		);
-
-	let containerSubCellsG = angleLegendG
-		.selectAll("g.angle-legend-petal")
-		.data(angles)
-		.enter()
-		.append("g")
-		.classed("angle-legend-petal", true)
-		.attr(
-			"transform",
-			(d, i) =>
-				`translate(${
-					windowW > 576 ? i * 45 + margin.l : i * 50 + 50
-				}, ${windowW > 576 ? 150 : 130}) rotate(${d.angle})`
-		);
-
-	containerSubCellsG
-		.append("use")
-		.attr("xlink:href", "#petal-svg")
-		.attr("fill", "#f880aa")
-		.attr("fill-opacity", 0.8)
-		.attr("stroke-width", 0.5)
-		.attr("stroke", "#ccc");
 
 	angleLegendG
-		.selectAll("g.angle-legend-label")
-		.data(angles)
-		.enter()
-		.append("g")
-		.classed("angle-legend-label", true)
-		.attr(
-			"transform",
-			(d, i) =>
-				`translate(${
-					windowW > 576 ? i * 45 + margin.l : i * 50 + 50
-				}, ${windowW > 576 ? 180 : 160})`
-		)
-		.attr("text-anchor", "middle")
-		.append("text")
-		.text((d) => d.temp);
+		.append("img")
+		.classed("angle-legend-img", true)
+		.attr("src", "asset/angle-legend.png");
+
+	// let containerSubCellsG = angleLegendG
+	// 	.selectAll("g.angle-legend-petal")
+	// 	.data(angles)
+	// 	.enter()
+	// 	.append("g")
+	// 	.classed("angle-legend-petal", true)
+	// 	.attr(
+	// 		"transform",
+	// 		(d, i) =>
+	// 			`translate(${
+	// 				windowW > 576 ? i * 45 + margin.l : i * 50 + 50
+	// 			}, ${windowW > 576 ? 150 : 130}) rotate(${d.angle})`
+	// 	);
+
+	// containerSubCellsG
+	// 	.append("use")
+	// 	.attr("xlink:href", "#petal-svg")
+	// 	.attr("fill", "#f880aa")
+	// 	.attr("fill-opacity", 0.8)
+	// 	.attr("stroke-width", 0.5)
+	// 	.attr("stroke", "#ccc");
+
+	// angleLegendG
+	// 	.selectAll("g.angle-legend-label")
+	// 	.data(angles)
+	// 	.enter()
+	// 	.append("g")
+	// 	.classed("angle-legend-label", true)
+	// 	.attr(
+	// 		"transform",
+	// 		(d, i) =>
+	// 			`translate(${
+	// 				windowW > 576 ? i * 45 + margin.l : i * 50 + 50
+	// 			}, ${windowW > 576 ? 180 : 160})`
+	// 	)
+	// 	.attr("text-anchor", "middle")
+	// 	.append("text")
+	// 	.text((d) => d.temp);
 
 	if (windowW > 576) {
 		let scatterplotSubG = containerSubG
@@ -247,9 +340,7 @@ function draw(data) {
 			.classed("axis-sub-label", true)
 			.attr(
 				"transform",
-				`rotate(-90) translate(${-(sizeSub.h + 220) / 2} ${
-					margin.l / 2
-				})`
+				`rotate(-90) translate(${-sizeSub.h / 2} ${margin.l / 2})`
 			)
 			.append("text")
 			.text("Year");
@@ -786,7 +877,7 @@ function interactive() {
 			let i = annotation.findIndex((el) => el.year === year);
 			let y = yScaleScatterplot(year);
 			d3.select(".scatterplot-annotation__line")
-				.style("top", year === 1880 ? `${y - 50}px` : `${y + 2}px`)
+				.style("top", year === 1880 ? `${y - 80}px` : `${y + 2}px`)
 				.style(
 					"left",
 					year === 1953
@@ -811,7 +902,7 @@ function interactive() {
 				d3.select(".scatterplot-annotation__line")
 					.style(
 						"top",
-						prevYear === 1880 ? `${y - 50}px` : `${y + 2}px`
+						prevYear === 1880 ? `${y - 80}px` : `${y + 2}px`
 					)
 					.style("left", `${margin.l}px`)
 					.html(`${annotation[i].comment}`);
