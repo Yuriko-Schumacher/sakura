@@ -47,10 +47,11 @@ img {
 
 #nav {
 	width: 300px;
+	margin: 10px auto 0;
 }
 
 #title {
-	height: calc(100vh - 45px);
+	height: calc(100vh - 55px);
 	display: flex;
 }
 
